@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +21,17 @@ public class CommentsAdapter extends ArrayAdapter<String> {
 	private LayoutInflater mInflater;
 	private List<String> items;
 	private Context context;
-	
+	int screenWidth; 
 	
 	public CommentsAdapter(Context context, int resource, List<String> items) {
 		super(context, resource, items);
 		
 		this.context = context;
-		
-		
+								
 		mInflater = LayoutInflater.from(context);
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		
+		screenWidth = metrics.widthPixels;
 		
 		setItems(items);
 	}
@@ -72,7 +75,7 @@ public class CommentsAdapter extends ArrayAdapter<String> {
 			
 			holder.txtUserName = (TextView) convertView.findViewById(R.id.txtUserName);
 			holder.txtComment = (TextView) convertView.findViewById(R.id.txtComment);
-
+								
 			convertView.setTag(holder);
 			
 		}
@@ -82,9 +85,17 @@ public class CommentsAdapter extends ArrayAdapter<String> {
 		}
 		
 		String item = getItem(position);
+		
+		//FIXME: Buscar una mejor alternativa
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();		
+		int width = metrics.widthPixels;		
+		if (width != screenWidth && width != 0 ) {
+			screenWidth = width;			
+		}
 				
 		holder.txtUserName.setText("Usuario");
 		holder.txtComment.setText(item.toString());
+		holder.txtComment.setWidth(screenWidth - 20);
 												
 		return(convertView);
 	}

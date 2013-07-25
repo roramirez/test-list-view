@@ -72,7 +72,7 @@ public class CommentsListFragment extends SherlockFragment {
 		mCommentsList = (ListView) getView().findViewById(R.id.lstComments);
 
 		updateAdapter();
-		updateComments();
+		
 
 	}
 
@@ -85,12 +85,19 @@ public class CommentsListFragment extends SherlockFragment {
 		{
 			mAdapter = new CommentsAdapter(getActivity().getApplicationContext(), R.layout.listitem_comments, items);
 			mCommentsList.setAdapter(mAdapter);
+			updateComments();
 		}
 
 		mAdapter.setItems(items);
-		//mAdapter.notifyDataSetChanged();
+		mAdapter.notifyDataSetChanged();
+		
+		mCommentsList.postDelayed(new Runnable() {
+			public void run() {
+				Utils.setListViewHeightBasedOnChildren2(mCommentsList);
+			}
+		}, 400);
 
-		Utils.setListViewHeightBasedOnChildren(mCommentsList);
+		
 
 	}
 
